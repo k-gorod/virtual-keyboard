@@ -1,31 +1,43 @@
-.letter, .func{
+
+.key{
     display: flex;
     height:30px;
-    
-    border-radius: 10px;
-    border: 1px solid black;
+    border-radius:  5px;
+    border: solid 0.5px rgba(0, 128, 0, 0.281);
+    border-bottom: solid 3px rgb(0, 128, 0);
+    border-right: solid 3px rgba(0, 128, 0, 0.816);
+    box-shadow: 2px 2px 8px rgba(0, 128, 0, 0.623);
     align-items: center;
     justify-content: center;
-   
-}
-.letter{
-    background: rgba(0, 0, 0, 0.2);
+    font-family: cursive;
+    color: green;
+    font-style: italic;
+
 }
 .func{
-    background: rgba(0, 0, 0, 0.4);
+    font-style: normal !important;
+    background: rgba(143, 241, 156, 0.4);
 }
-.key:active{
-    background: red !important;
-}
-.active{
-    background: red !important;
+.letter{
+    background: rgba(255, 255, 255, 0);
 }
 
+.key:active{
+    background: rgba(0, 128, 0, 0.6 ) !important;
+    border: solid 0.5px rgba(0, 128, 0, 0.856)!important;
+    transform: translate(0px,2px);
+}
+.active{
+    background: rgba(0, 128, 0, 0.6) !important;
+    border: solid 0.5px rgba(0, 128, 0, 0.856)!important;
+    transform: translate(0px,2px);
+}
 
 
 
 
 #keyboard{
+   
     user-select: none;
     display: grid;
     grid-gap:3px;
@@ -45,7 +57,10 @@
 }
 @media (min-width:1000px){
     .letter:hover{
-        background: rgba(0, 0, 0, 0.459);
+        background: rgba(102, 255, 0, 0.274);
+    }
+    .func:hover{
+        background:  rgba(143, 241, 156, 0.7);
     }
 }
 #text{

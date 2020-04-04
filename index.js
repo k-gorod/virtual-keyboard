@@ -1,7 +1,7 @@
 let shift;
 let alt;
-if(!localStorage.getItem('leng')){localStorage.setItem('leng', 'eng')}
-window.onload = () => {
+if(!localStorage.getItem('lang')){localStorage.setItem('lang', 'eng')}
+window.onload = ()=>{
     var keyboard = new Keyboard(keys);
     keyboard.render();
     document.addEventListener('touchstart',(e)=>{e.preventDefault();})
@@ -21,7 +21,7 @@ window.onload = () => {
                     keyboard.toDefaultKey(document.getElementById("shiftright"));
                     shift=false;
                     keyboard.update()
-                    if(e.target.innerText=="Alt"){keyboard.changeLeng();keyboard.update();}
+                    if(e.target.innerText=="Alt"){keyboard.changeLang();keyboard.update();}
                 }
                 if(e.target.classList.contains('letter')){keyboard.writeLetter(e.target)}
                 
@@ -33,15 +33,59 @@ window.onload = () => {
         }
     })
     document.getElementById('keyboard').addEventListener('mouseup',(e)=>{
-        if(e.target.id=="leng"){
-            keyboard.changeLeng();
+        if(e.target.id=="lang"){
+            keyboard.changeLang();
             keyboard.update();
         }
     })
+    //============================================
+    document.addEventListener("keydown",(e)=>{
+        e.preventDefault();
+        console.log()   
+        const key = document.getElementById(e.code.toLowerCase());
+        if(key){
+            if(key.id=='shiftleft'||key.id=='shiftright'){
+                shift=true;keyboard.update()
+                keyboard.activateKey(document.getElementById(key.id))
+            }
+            if(key.id=='capslock'){
+                shift=shift?false:true
+                keyboard.update();
+                keyboard.activateKey(document.getElementById(key.id))
+            }
+            if(key.id=="lang"){
+                keyboard.changeLang();
+                keyboard.update();
+            }
+            keyboard.activateKey(key)
+            key.classList.contains('letter')?keyboard.writeLetter(key):
+            key.classList.contains('func')?keyboard.doFunc(key):true
+        }
+        
+    })
+    document.addEventListener("keyup",(e)=>{
+        e.preventDefault();
+        const key =document.getElementById(e.code.toLowerCase());
+        if(key){
+            if(key.id=='altleft'||key.id=='altleft'){
+                if(e.shiftKey==true){keyboard.changeLang();}
+                keyboard.update()
+            }
+            if(key.id=='shiftleft'||key.id=='shiftright'){
+                if(e.altKey==true){keyboard.changeLang()}
+                shift=false;keyboard.update()
+                keyboard.toDefaultKey(key)
+            }
+            keyboard.toDefaultKey(key)
+        }
+    })
 }
+
+
 class Keyboard{
     constructor(arrOfKeys){
         this.arrOfKeys = arrOfKeys;
+        this.div =document.createElement('DIV');
     }
     render(){
         this.div =document.createElement('DIV');
@@ -49,8 +93,8 @@ class Keyboard{
         const textarea = document.createElement('textarea');
         textarea.setAttribute("id","text");
         const p = document.createElement("p");
-        p.innerText = "To change lenguege press Shift+Alt or 🌍";
-        p.style = "margin: 10px auto"
+        p.innerText = "To change language press Shift+Alt or 🌍";
+        p.style = "margin: 10px auto; text-align: center;"
         document.body.prepend(textarea);
         document.body.append(this.div);
         document.body.append(p);
@@ -61,14 +105,14 @@ class Keyboard{
         this.div.innerText = "";
         for (let i = 0; i < this.arrOfKeys.length; i++) {
             for (let n = 0; n < this.arrOfKeys[i].length; n++) {
-               document.getElementById("keyboard").append(this.createKey(this.arrOfKeys[i][n],i+1,localStorage.getItem('leng')));
+               document.getElementById("keyboard").append(this.createKey(this.arrOfKeys[i][n],i+1,localStorage.getItem('lang')));
             }
         }
     }
-    createKey(obj,row,leng){
+    createKey(obj,row,lang){
         const key = document.createElement('DIV');
         const n=shift?1:0;
-        const text = (leng=="ru"&&obj.ru)?obj.ru[n]:obj.eng[n];
+        const text = (lang=="ru"&&obj.ru)?obj.ru[n]:obj.eng[n];
         key.innerText=
         text.toLowerCase()=="control"?"Ctrl":
         text.toLowerCase()=="meta"?"Win":
@@ -92,9 +136,27 @@ class Keyboard{
         if(key.id=="enter"){w = "\n";}else
         if(key.id=="space"){w = " ";}
         else{w = key.innerText}
-        text.value=text.value.substring(0,pos1)+""+w+""+text.value.substring(pos2,text.value.length)
+        text.value=text.value.substring(0,pos1)+""+w+""+text.value.substring(pos2,text.value.langth)
         text.setSelectionRange(pos1+n, pos1+n);
     }
+    doFunc(key){
+        key.innerText=="Win"||key.innerText=="Shift"||key.innerText=="Alt"||
+        key.innerText=="Ctrl"||key.id=="capslock"||key.id=="lang"?
+        true:this.writeLetter(key);
+    }
+    activateKey(key){
+        key.classList.add('active')
+        if(key.id=="alt")alt==true;
+    }
+    toDefaultKey(key){
+        key.classList.remove('active')
+        if(key.id=="alt")alt==false;
+    }
+    changeLang(){
+        let lang=localStorage.getItem('lang')=="eng"?"ru":"eng";
+        localStorage.setItem('lang',lang)
+    }
+
 }
 const keys =[
 [    
@@ -351,7 +413,7 @@ const keys =[
 ],
 [
     {
-    "id":"leng",
+    "id":"lang",
     "class":"key func",
     "eng":["🌍","🌍"],
     },
