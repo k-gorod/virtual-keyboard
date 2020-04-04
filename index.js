@@ -2,8 +2,42 @@ let shift;
 let alt;
 if(!localStorage.getItem('leng')){localStorage.setItem('leng', 'eng')}
 window.onload = () => {
-    const keyboard = new Keyboard(keys);
+    var keyboard = new Keyboard(keys);
     keyboard.render();
+    document.addEventListener('touchstart',(e)=>{e.preventDefault();})
+    document.getElementById('text').addEventListener('touchstart',(e)=>{e.preventDefault();})
+    document.getElementById('keyboard').addEventListener('mousedown',(e)=>{
+        e.preventDefault();
+        if(e.target.classList.contains('key')){
+            if(e.target.id=='shiftleft'||e.target.id=='shiftright'||e.target.id=='capslock'){
+                shift=shift?false:true;
+                keyboard.update()
+                e.target.classList.contains('active')?keyboard.toDefaultKey(e.target):
+                keyboard.activateKey(document.getElementById(e.target.id))
+            }
+            if(e.target.classList.contains('letter')||e.target.innerText=="Alt"){
+                if(document.getElementById("shiftleft").classList.contains('active')||document.getElementById("shiftright").classList.contains('active')){
+                    keyboard.toDefaultKey(document.getElementById("shiftleft"));
+                    keyboard.toDefaultKey(document.getElementById("shiftright"));
+                    shift=false;
+                    keyboard.update()
+                    if(e.target.innerText=="Alt"){keyboard.changeLeng();keyboard.update();}
+                }
+                if(e.target.classList.contains('letter')){keyboard.writeLetter(e.target)}
+                
+            }
+            if(e.target.classList.contains('func')){
+                keyboard.doFunc(e.target);
+                }
+            
+        }
+    })
+    document.getElementById('keyboard').addEventListener('mouseup',(e)=>{
+        if(e.target.id=="leng"){
+            keyboard.changeLeng();
+            keyboard.update();
+        }
+    })
 }
 class Keyboard{
     constructor(arrOfKeys){
