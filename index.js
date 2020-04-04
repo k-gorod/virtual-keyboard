@@ -25,7 +25,34 @@ class Keyboard{
         }
     }
     createKey(obj,row,leng){
-
+        const key = document.createElement('DIV');
+        const n=shift?1:0;
+        const text = (leng=="ru"&&obj.ru)?obj.ru[n]:obj.eng[n];
+        key.innerText=
+        text.toLowerCase()=="control"?"Ctrl":
+        text.toLowerCase()=="meta"?"Win":
+        text.toLowerCase()=="delete"?"Del":
+        text;
+        key.setAttribute("id",obj.id);
+        key.setAttribute("class",obj.class+" row"+row);
+        return key;
+    }
+    writeLetter(key){
+        const text =document.getElementById("text");
+        let pos1=text.selectionStart;
+        let pos2=text.selectionEnd;
+        let n = 1;//На сколько сместим каретку, после добавления нужного элемента
+        let w;//То какой элемент будет добавлен
+        
+        if(key.id=="tab"){w = "   ";n=3}else
+        if(key.id=="backspace"&&pos1==pos2){w = "",pos1--;n=0;}else
+        if(key.id=="delete"&&pos1==pos2){w ="",pos2++;n=0;}else
+        if(key.id=="backspace"||key.id=="delete"){w = "";n=0}else
+        if(key.id=="enter"){w = "\n";}else
+        if(key.id=="space"){w = " ";}
+        else{w = key.innerText}
+        text.value=text.value.substring(0,pos1)+""+w+""+text.value.substring(pos2,text.value.length)
+        text.setSelectionRange(pos1+n, pos1+n);
     }
 }
 const keys =[
