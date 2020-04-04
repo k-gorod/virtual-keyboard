@@ -42,12 +42,19 @@ window.onload = () => {
 class Keyboard{
     constructor(arrOfKeys){
         this.arrOfKeys = arrOfKeys;
-        this.div =document.createElement('DIV');
     }
     render(){
+        this.div =document.createElement('DIV');
         this.div.setAttribute("id","keyboard");
-        document.body.append(this.div)
-        this.update()
+        const textarea = document.createElement('textarea');
+        textarea.setAttribute("id","text");
+        const p = document.createElement("p");
+        p.innerText = "To change lenguege press Shift+Alt or 🌍";
+        p.style = "margin: 10px auto"
+        document.body.prepend(textarea);
+        document.body.append(this.div);
+        document.body.append(p);
+        this.update();
     }
     update(){
         document.getElementById("keyboard").innerText="";
