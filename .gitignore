@@ -1,5 +1,5 @@
 prepros.config
 *.scss
-
+.gitignore
 objectsRender.js
 test.html
