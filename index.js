@@ -6,8 +6,18 @@ window.onload = ()=>{
     keyboard.render();
     document.addEventListener('touchstart',(e)=>{e.preventDefault();})
     document.getElementById('text').addEventListener('touchstart',(e)=>{e.preventDefault();})
+    document.body.addEventListener('mousedown',mouseMove(event));
+    function mouseMove(e){
+        
+        console.log(e);
+        //console.log(event.pageY);
+
+    }
     document.getElementById('keyboard').addEventListener('mousedown',(e)=>{
+        
         e.preventDefault();
+        mouseMove(e)
+        
         if(e.target.classList.contains('key')){
             if(e.target.id=='shiftleft'||e.target.id=='shiftright'||e.target.id=='capslock'){
                 shift=shift?false:true;
@@ -41,7 +51,6 @@ window.onload = ()=>{
     //============================================
     document.addEventListener("keydown",(e)=>{
         e.preventDefault();
-        console.log()   
         const key = document.getElementById(e.code.toLowerCase());
         if(key){
             if(key.id=='shiftleft'||key.id=='shiftright'){
